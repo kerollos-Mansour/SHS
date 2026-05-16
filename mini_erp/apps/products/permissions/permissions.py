@@ -1,15 +1,10 @@
 from rest_framework import permissions
+from core.permissions import AdminSafePermission
 
-class IsAdminOrReadOnly(permissions.BasePermission):
+class IsAdminOrReadOnly(AdminSafePermission):
     """
     Custom permission to only allow Admins to edit products.
     Sales users (and other authenticated users) can only view.
     """
-    def has_permission(self, request, view):
-        if not request.user or not request.user.is_authenticated:
-            return False
-            
-        if request.method in permissions.SAFE_METHODS:
-            return request.user.is_sales() or request.user.is_admin()
-            
-        return request.user.is_admin()
+    def has_sales_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS
