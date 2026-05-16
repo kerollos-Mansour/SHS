@@ -7,3 +7,6 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
     queryset = SalesOrder.objects.all()
     serializer_class = SalesOrderSerializer
     permission_classes = [IsAdminOrSalesCreateView]
+    filterset_fields = ['status', 'customer', 'order_date']
+    search_fields = ['order_number']
+    ordering_fields = ['order_date', 'total_amount']
