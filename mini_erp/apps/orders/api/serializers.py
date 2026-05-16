@@ -33,7 +33,7 @@ class SalesOrderSerializer(serializers.ModelSerializer):
         calculate_order_total(order)
         
         if initial_status != SalesOrder.STATUS_PENDING:
-            change_order_status(order, initial_status)
+            change_order_status(order, initial_status, user=self.context['request'].user)
             
         return order
 
@@ -41,5 +41,5 @@ class SalesOrderSerializer(serializers.ModelSerializer):
         # We don't allow updating items in this simple version, just the status
         new_status = validated_data.get('status', instance.status)
         if new_status != instance.status:
-            change_order_status(instance, new_status)
+            change_order_status(instance, new_status, user=self.context['request'].user)
         return instance
